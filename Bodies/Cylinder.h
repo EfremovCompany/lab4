@@ -2,7 +2,7 @@
 #include "SolidBody.h"
 
 class CCylinder final :
-	public CSolidBody
+	public CAbstractBody
 {
 public:
 	CCylinder(double radius, double height, double density);
@@ -11,6 +11,7 @@ public:
 	double GetRadius() const;
 	double GetHeight() const;
 
+	virtual bool IsDataMoreZero() const override;
 	virtual double GetVolume() const override;
 	virtual std::string GetInfo() const override;
 

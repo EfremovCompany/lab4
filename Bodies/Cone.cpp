@@ -2,8 +2,11 @@
 #include "Cone.h"
 #include <sstream>
 
+// TODO: use unified style for delimiters in initalization lists
 CCone::CCone(double radius, double height, double density)
-	: CSolidBody(density), m_radius(radius), m_height(height)
+	: CAbstractBody(density)
+	, m_radius(radius)
+	, m_height(height)
 {
 }
 
@@ -19,6 +22,11 @@ double CCone::GetRadius() const
 double CCone::GetHeight() const
 {
 	return m_height;
+}
+
+bool CCone::IsDataMoreZero() const
+{
+	return (m_height > 0 && m_radius > 0);
 }
 
 double CCone::GetVolume() const

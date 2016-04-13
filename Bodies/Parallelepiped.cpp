@@ -2,9 +2,12 @@
 #include "Parallelepiped.h"
 #include <sstream>
 
+// TODO: use unified style for delimiters in initalization lists
 CParallelepiped::CParallelepiped(double width, double height, double depth, double density)
-	: CSolidBody(density),
-	m_width(width), m_height(height), m_depth(depth)
+	: CAbstractBody(density)
+	, m_width(width)
+	, m_height(height)
+	, m_depth(depth)
 {
 }
 
@@ -25,6 +28,17 @@ double CParallelepiped::GetHeight() const
 double CParallelepiped::GetDepth() const
 {
 	return m_depth;
+}
+
+
+bool CParallelepiped::IsDataMoreZero() const
+{
+	// TODO: simplify
+	if (m_width > 0 && m_height > 0 && m_depth > 0)
+	{
+		return true;
+	}
+	return false;
 }
 
 double CParallelepiped::GetVolume() const

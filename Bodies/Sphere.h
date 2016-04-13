@@ -1,15 +1,15 @@
 #pragma once
 #include "Solidbody.h"
 
-class CSphere final : public CSolidBody
+class CSphere final : public CAbstractBody
 {
 public:
 	CSphere(double radius, double density);
 	~CSphere(void);
 
 	double GetRadius() const;
-	// методы, переопредел€ющие методы базовых классов, рекомендуетс€ 
-	// объ€вл€ть со спецификатором override
+	
+	virtual bool IsDataMoreZero() const override;
 	double GetVolume() const override final;
 	std::string GetInfo() const override final;
 private:

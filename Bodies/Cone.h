@@ -3,7 +3,7 @@
 #include "Sphere.h"
 
 class CCone final :
-	public CSolidBody
+	public CAbstractBody
 {
 public:
 	CCone(double radius, double height, double density);
@@ -12,6 +12,7 @@ public:
 	double GetRadius() const;
 	double GetHeight() const;
 
+	virtual bool IsDataMoreZero() const override;
 	virtual double GetVolume() const override;
 	virtual std::string GetInfo() const override;
 

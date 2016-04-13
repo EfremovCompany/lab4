@@ -2,9 +2,13 @@
 #include "Cylinder.h"
 #include <sstream>
 
+// TODO: use unified style for delimiters in initalization lists
 CCylinder::CCylinder(double radius, double height, double density)
-	: CSolidBody(density), m_radius(radius), m_height(height)
+	: CAbstractBody(density)
+	, m_radius(radius)
+	, m_height(height)
 {
+	
 }
 
 CCylinder::~CCylinder(void)
@@ -19,6 +23,18 @@ double CCylinder::GetRadius() const
 double CCylinder::GetHeight() const
 {
 	return m_height;
+}
+
+
+
+bool CCylinder::IsDataMoreZero() const
+{
+	// TODO: simplify method
+	if (m_height > 0 && m_radius > 0)
+	{
+		return true;
+	}
+	return false;
 }
 
 double CCylinder::GetVolume() const

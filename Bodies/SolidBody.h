@@ -1,15 +1,17 @@
 #pragma once
 #include "Body.h"
 
-class CSolidBody :
-	public CBody
+// rename to CAbstractBody
+class CAbstractBody :
+	public IBody
 {
 public:
-	CSolidBody(double density);
-	~CSolidBody();
-
-	virtual double GetDensity() const override final;
-	virtual double GetMass() const override final;
+	//TODO сделать конструктор явным
+	explicit CAbstractBody(double density);
+	~CAbstractBody();
+	
+	double GetDensity() const final;
+	double GetMass() const final;
 private:
 	double m_density;
 };

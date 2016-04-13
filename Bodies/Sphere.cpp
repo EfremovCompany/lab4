@@ -3,7 +3,7 @@
 #include <sstream>
 
 CSphere::CSphere(double radius, double density)
-	: CSolidBody(density)
+	: CAbstractBody(density)
 	, m_radius(radius)
 {
 }
@@ -15,6 +15,16 @@ CSphere::~CSphere(void)
 double CSphere::GetRadius() const
 {
 	return m_radius;
+}
+
+bool CSphere::IsDataMoreZero() const
+{
+	// TODO: simplify
+	if (m_radius > 0)
+	{
+		return true;
+	}
+	return false;
 }
 
 double CSphere::GetVolume() const

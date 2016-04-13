@@ -7,18 +7,13 @@
 
 using namespace std;
 
-CCompound::CCompound(void)
-{
-}
 
-CCompound::~CCompound(void)
-{
-}
-
-bool CCompound::AddBody(const shared_ptr<CBody> &body)
+bool CCompound::AddBody(const shared_ptr<IBody> &body)
 {
 	if (this == body.get())
+	{
 		return false;
+	}
 
 	shared_ptr<CCompound> bodyAsCompound = dynamic_pointer_cast<CCompound>(body);
 	if (bodyAsCompound.get() != nullptr)
@@ -38,16 +33,21 @@ size_t CCompound::GetContentsCount() const
 	return m_contents.size();
 }
 
+bool CCompound::IsDataMoreZero() const
+{
+	return false;
+}
+
 double CCompound::GetVolume() const
 {
 	return accumulate(m_contents.cbegin(), m_contents.cend(), 0.0,
-		[](double sum, const shared_ptr<CBody> &body) { return sum + body->GetVolume(); });
+		[](double sum, const shared_ptr<IBody> &body) { return sum + body->GetVolume(); });
 }
 
 double CCompound::GetMass() const
 {
 	return accumulate(m_contents.cbegin(), m_contents.cend(), 0.0,
-		[](double sum, const shared_ptr<CBody> &body) { return sum + body->GetMass(); });
+		[](double sum, const shared_ptr<IBody> &body) { return sum + body->GetMass(); });
 }
 
 double CCompound::GetDensity() const
@@ -58,7 +58,7 @@ double CCompound::GetDensity() const
 	return (GetMass() / GetVolume());
 }
 
-bool CCompound::HasBodyInside(const CBody *body) const
+bool CCompound::HasBodyInside(const IBody *body) const
 {
 	for (auto & curBody : m_contents)
 	{
@@ -68,12 +68,9 @@ bool CCompound::HasBodyInside(const CBody *body) const
 		}
 
 		shared_ptr<CCompound> curBodyAsCompound = dynamic_pointer_cast<CCompound>(curBody);
-		if (curBodyAsCompound)
+		if (curBodyAsCompound && curBodyAsCompound->HasBodyInside(body))
 		{
-			if (curBodyAsCompound->HasBodyInside(body))
-			{
-				return true;
-			}
+			return true;
 		}
 	}
 

@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE(HasVolume)
 {
 	const double EXPECTED_VOLUME = 4 * M_PI / 3 * pow(EXPECTED_RADIUS, 3);
 	BOOST_CHECK_EQUAL(sphere.GetVolume(), EXPECTED_VOLUME);
-	CBody & sphereAsBody = sphere;
+	IBody & sphereAsBody = sphere;
 	BOOST_CHECK_EQUAL(sphereAsBody.GetVolume(), EXPECTED_VOLUME);
 }
 

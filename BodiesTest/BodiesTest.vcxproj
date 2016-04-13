@@ -86,6 +86,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Bodies\Body.h" />
+    <ClInclude Include="..\Bodies\Compound.h" />
+    <ClInclude Include="..\Bodies\Cone.h" />
+    <ClInclude Include="..\Bodies\Cylinder.h" />
+    <ClInclude Include="..\Bodies\Parallelepiped.h" />
     <ClInclude Include="..\Bodies\SolidBody.h" />
     <ClInclude Include="..\Bodies\Sphere.h" />
     <ClInclude Include="stdafx.h" />
@@ -93,9 +97,16 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\Bodies\Body.cpp" />
+    <ClCompile Include="..\Bodies\Compound.cpp" />
+    <ClCompile Include="..\Bodies\Cone.cpp" />
+    <ClCompile Include="..\Bodies\Cylinder.cpp" />
+    <ClCompile Include="..\Bodies\Parallelepiped.cpp" />
     <ClCompile Include="..\Bodies\SolidBody.cpp" />
     <ClCompile Include="..\Bodies\Sphere.cpp" />
     <ClCompile Include="BodiesTest.cpp" />
+    <ClCompile Include="CompoundTest.cpp" />
+    <ClCompile Include="CylinderTests.cpp" />
+    <ClCompile Include="ParallelepipedTests.cpp" />
     <ClCompile Include="SphereTests.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

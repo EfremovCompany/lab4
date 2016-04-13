@@ -2,7 +2,7 @@
 #include "SolidBody.h"
 
 class CParallelepiped final :
-	public CSolidBody
+	public CAbstractBody
 {
 public:
 	CParallelepiped(double width, double height, double depth, double density);
@@ -12,6 +12,7 @@ public:
 	double GetHeight() const;
 	double GetDepth() const;
 
+	virtual bool IsDataMoreZero() const override;
 	virtual double GetVolume() const override;
 	virtual std::string GetInfo() const override;
 

@@ -2,7 +2,6 @@
 //
 
 #include "stdafx.h"
-
 #include "Compound.h"
 #include "Cone.h"
 #include "Cylinder.h"
@@ -11,8 +10,8 @@
 
 using namespace std;
 
-shared_ptr<CBody> AddBody();
-vector<shared_ptr<CBody>> bodies;
+shared_ptr<IBody> AddBody();
+vector<shared_ptr<IBody>> bodies;
 
 string LCase(string str)
 {
@@ -36,7 +35,7 @@ double EnterDouble(const char *text)
 	return result;
 }
 
-shared_ptr<CBody> AddCone()
+shared_ptr<IBody> AddCone()
 {
 	double radius, height, density;
 
@@ -47,7 +46,7 @@ shared_ptr<CBody> AddCone()
 	return make_shared<CCone>(radius, height, density);
 }
 
-shared_ptr<CBody> AddCylinder()
+shared_ptr<IBody> AddCylinder()
 {
 	double radius, height, density;
 
@@ -58,7 +57,7 @@ shared_ptr<CBody> AddCylinder()
 	return make_shared<CCylinder>(radius, height, density);
 }
 
-shared_ptr<CBody> AddParallelepiped()
+shared_ptr<IBody> AddParallelepiped()
 {
 	double width, height, depth, density;
 
@@ -70,7 +69,7 @@ shared_ptr<CBody> AddParallelepiped()
 	return make_shared<CParallelepiped>(width, height, depth, density);
 }
 
-shared_ptr<CBody> AddSphere()
+shared_ptr<IBody> AddSphere()
 {
 	double radius, density;
 
@@ -80,13 +79,13 @@ shared_ptr<CBody> AddSphere()
 	return make_shared<CSphere>(radius, density);
 }
 
-shared_ptr<CBody> AddCompound()
+shared_ptr<IBody> AddCompound()
 {
 	cout << "Enter bodies that compound would be consisting of:" << endl;
 
 	shared_ptr<CCompound> compound = make_shared<CCompound>();
 
-	shared_ptr<CBody> compoundPart;
+	shared_ptr<IBody> compoundPart;
 	while (compoundPart = AddBody())
 	{
 		compound->AddBody(compoundPart);
@@ -103,10 +102,10 @@ shared_ptr<CBody> AddCompound()
 	}
 }
 
-shared_ptr<CBody> AddBody()
+shared_ptr<IBody> AddBody()
 {
 	string bodyName;
-	shared_ptr<CBody> body;
+	shared_ptr<IBody> body;
 
 	cin.clear();
 	fflush(stdin);
@@ -119,18 +118,38 @@ shared_ptr<CBody> AddBody()
 	if (bodyName == "cone")
 	{
 		body = AddCone();
+		if (!body->IsDataMoreZero())
+		{
+			cout << "Data can't < 0" << endl;
+			return nullptr;
+		}
 	}
 	else if (bodyName == "cylinder")
 	{
 		body = AddCylinder();
+		if (!body->IsDataMoreZero())
+		{
+			cout << "Data can't < 0" << endl;
+			return nullptr;
+		}
 	}
 	else if (bodyName == "parallelepiped")
 	{
 		body = AddParallelepiped();
+		if (!body->IsDataMoreZero())
+		{
+			cout << "Data can't < 0" << endl;
+			return nullptr;
+		}
 	}
 	else if (bodyName == "sphere")
 	{
 		body = AddSphere();
+		if (!body->IsDataMoreZero())
+		{
+			cout << "Data can't < 0" << endl;
+			return nullptr;
+		}
 	}
 	else if (bodyName == "compound")
 	{
@@ -157,12 +176,12 @@ shared_ptr<CBody> AddBody()
 	return body;
 }
 
-bool MassCompareFunct(const shared_ptr<CBody> &a, const shared_ptr<CBody> &b)
+bool MassCompareFunct(const shared_ptr<IBody> &a, const shared_ptr<IBody> &b)
 {
 	return a->GetMass() < b->GetMass();
 }
 
-double GetArchimedesForce(const shared_ptr<CBody> &body)
+double GetArchimedesForce(const shared_ptr<IBody> &body)
 {
 	static const double waterDensity = 1000;
 	static const double g = 9.81;
@@ -170,14 +189,14 @@ double GetArchimedesForce(const shared_ptr<CBody> &body)
 	return (body->GetDensity() - waterDensity) * g * body->GetVolume();
 }
 
-bool FloatCompareFunct(const shared_ptr<CBody> &a, const shared_ptr<CBody> &b)
+bool FloatCompareFunct(const shared_ptr<IBody> &a, const shared_ptr<IBody> &b)
 {
 	return GetArchimedesForce(a) < GetArchimedesForce(b);
 }
 
-int _tmain(int argc, _TCHAR* argv[])
+int _tmain(int /*argc*/, _TCHAR* /*argv[]*/)
 {
-	shared_ptr<CBody> body;
+	shared_ptr<IBody> body;
 
 	while (body = AddBody())
 	{
@@ -190,11 +209,11 @@ int _tmain(int argc, _TCHAR* argv[])
 		return 0;
 	}
 
-	shared_ptr<CBody> maxMass = *max_element(bodies.begin(), bodies.end(), MassCompareFunct);
+	shared_ptr<IBody> maxMass = *max_element(bodies.begin(), bodies.end(), MassCompareFunct);
 	cout << "The body with the greatest mass is:" << endl;
 	cout << maxMass->GetInfo() << endl << endl;
 
-	shared_ptr<CBody> lightestInWater = *min_element(bodies.begin(), bodies.end(), FloatCompareFunct);
+	shared_ptr<IBody> lightestInWater = *min_element(bodies.begin(), bodies.end(), FloatCompareFunct);
 	cout << "The body which is lightest in water is:" << endl;
 	cout << lightestInWater->GetInfo() << endl << endl;
 

@@ -1,21 +1,24 @@
 #include "stdafx.h"
 #include "SolidBody.h"
 
-CSolidBody::CSolidBody(double density)
+CAbstractBody::CAbstractBody(double density)
 	:m_density(density)
 {
 }
 
-CSolidBody::~CSolidBody()
+CAbstractBody::~CAbstractBody()
 {
 }
 
-double CSolidBody::GetDensity() const
+
+
+
+double CAbstractBody::GetDensity() const
 {
 	return m_density;
 }
 
-double CSolidBody::GetMass() const
+double CAbstractBody::GetMass() const
 {
 	return GetDensity() * GetVolume();
 }
