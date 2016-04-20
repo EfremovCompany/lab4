@@ -30,11 +30,7 @@ double CCylinder::GetHeight() const
 bool CCylinder::IsDataMoreZero() const
 {
 	// TODO: simplify method
-	if (m_height > 0 && m_radius > 0)
-	{
-		return true;
-	}
-	return false;
+	return (m_height > 0 && m_radius > 0);
 }
 
 double CCylinder::GetVolume() const

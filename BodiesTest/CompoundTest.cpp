@@ -12,7 +12,6 @@ using namespace std;
 struct CompoundFixture
 {
 	CCompound comp;
-
 	CSphere sphere;
 	CCone cone;
 	CCylinder cylinder;
@@ -51,24 +50,6 @@ BOOST_AUTO_TEST_CASE(HasDensity)
 	double expectedMass = sphere.GetMass() + cone.GetMass() + cylinder.GetMass() + par.GetMass();
 	double expectedDensity = expectedMass / expectedVolume;
 	BOOST_CHECK_EQUAL(density, expectedDensity);
-}
-
-BOOST_AUTO_TEST_CASE(HasInformation)
-{
-	const std::string info = comp.GetInfo();
-	std::ostringstream expectedInfo;
-	
-	expectedInfo << "Compound body composed of " << comp.GetContentsCount() << " bodies" << endl;
-	expectedInfo << "With mass " << comp.GetMass();
-	expectedInfo << ", volume " << comp.GetVolume();
-	expectedInfo << " and density " << comp.GetDensity() << endl;
-	expectedInfo << "Contents:" << endl;
-	expectedInfo << sphere.GetInfo() << endl;
-	expectedInfo << cone.GetInfo() << endl;
-	expectedInfo << cylinder.GetInfo() << endl;
-	expectedInfo << par.GetInfo() << endl;
-
-	BOOST_CHECK_EQUAL(expectedInfo.str(), info);
 }
 
 BOOST_AUTO_TEST_CASE(TestEmptyCompound)

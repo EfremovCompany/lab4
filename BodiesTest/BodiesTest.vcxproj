@@ -105,6 +105,7 @@
     <ClCompile Include="..\Bodies\Sphere.cpp" />
     <ClCompile Include="BodiesTest.cpp" />
     <ClCompile Include="CompoundTest.cpp" />
+    <ClCompile Include="ConeTest.cpp" />
     <ClCompile Include="CylinderTests.cpp" />
     <ClCompile Include="ParallelepipedTests.cpp" />
     <ClCompile Include="SphereTests.cpp" />

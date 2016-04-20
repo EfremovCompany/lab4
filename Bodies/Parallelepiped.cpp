@@ -34,11 +34,7 @@ double CParallelepiped::GetDepth() const
 bool CParallelepiped::IsDataMoreZero() const
 {
 	// TODO: simplify
-	if (m_width > 0 && m_height > 0 && m_depth > 0)
-	{
-		return true;
-	}
-	return false;
+	return (m_width > 0 && m_height > 0 && m_depth > 0);
 }
 
 double CParallelepiped::GetVolume() const

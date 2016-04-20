@@ -10,22 +10,34 @@
 
 static const double EXPECTED_RADIUS = 3.5;
 static const double EXPECTED_DENSITY = 8920;
+static const double EXPECTED_RADIUS_MINUS = -3.5;
 
 struct SphereFixture
 {
 	CSphere sphere;
+	CSphere sphere_bad;
 
 	SphereFixture()
-		:sphere(EXPECTED_RADIUS, EXPECTED_DENSITY)
+		:sphere(EXPECTED_RADIUS, EXPECTED_DENSITY), sphere_bad(EXPECTED_RADIUS_MINUS, EXPECTED_DENSITY)
 	{
 	}
 };
 
 BOOST_FIXTURE_TEST_SUITE(Sphere, SphereFixture)
 
+BOOST_AUTO_TEST_CASE(IsSphereOK)
+{
+	BOOST_CHECK_EQUAL(sphere.IsDataMoreZero(), true);
+}
+
 BOOST_AUTO_TEST_CASE(HasRadius)
 {
 	BOOST_CHECK_EQUAL(sphere.GetRadius(), EXPECTED_RADIUS);
+}
+
+BOOST_AUTO_TEST_CASE(CantLessZero)
+{
+	BOOST_CHECK_EQUAL(sphere_bad.IsDataMoreZero(), false);
 }
 
 BOOST_AUTO_TEST_CASE(HasVolume)

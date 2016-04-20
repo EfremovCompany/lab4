@@ -1,114 +1,58 @@
 #include "stdafx.h"
-#include <memory>
-#include "../Bodies/Compound.h"
-
-#include "../Bodies/Sphere.h"
 #include "../Bodies/Cone.h"
-#include "../Bodies/Cylinder.h"
-#include "../Bodies/Parallelepiped.h"
 
-using namespace std;
+static const double EXPECTED_RADIUS = 9;
+static const double EXPECTED_HEIGHT = 4.5;
+static const double EXPECTED_DENSITY = 25000;
 
-struct CompoundFixture
+static const double WRONG_EXPECTED_RADIUS = -9;
+static const double WRONG_EXPECTED_DENSITY = -25000;
+
+struct ConeFixture
 {
-	CCompound comp;
-
-	CSphere sphere;
 	CCone cone;
-	CCylinder cylinder;
-	CParallelepiped par;
+	CCone cone_fail;
 
-	CompoundFixture()
-		: sphere(10, 5), cone(10, 15, 60), cylinder(10, 15, 30), par(10, 15, 20, 50)
+	ConeFixture()
+		: cone(EXPECTED_RADIUS, EXPECTED_HEIGHT, EXPECTED_DENSITY)
+		, cone_fail(WRONG_EXPECTED_RADIUS, EXPECTED_HEIGHT, WRONG_EXPECTED_DENSITY)
 	{
-		comp.AddBody(make_shared<CSphere>(sphere));
-		comp.AddBody(make_shared<CCone>(cone));
-		comp.AddBody(make_shared<CCylinder>(cylinder));
-		comp.AddBody(make_shared<CParallelepiped>(par));
 	}
 };
 
-BOOST_FIXTURE_TEST_SUITE(Compound, CompoundFixture)
+BOOST_FIXTURE_TEST_SUITE(Cone, ConeFixture)
 
-BOOST_AUTO_TEST_CASE(HasVolume)
+BOOST_AUTO_TEST_CASE(HasDimensions)
 {
-	double volume = comp.GetVolume();
-	double expectedVolume = sphere.GetVolume() + cone.GetVolume() + cylinder.GetVolume() + par.GetVolume();
-	BOOST_CHECK_EQUAL(volume, expectedVolume);
+	BOOST_CHECK_EQUAL(cone.IsDataMoreZero(), true);
+	BOOST_CHECK_EQUAL(cone.GetHeight(), EXPECTED_HEIGHT);
+	BOOST_CHECK_EQUAL(cone.GetRadius(), EXPECTED_RADIUS);
 }
 
-BOOST_AUTO_TEST_CASE(HasMass)
+BOOST_AUTO_TEST_CASE(BadCylIsFail)
 {
-	double mass = comp.GetMass();
-	double expectedMass = sphere.GetMass() + cone.GetMass() + cylinder.GetMass() + par.GetMass();
-	BOOST_CHECK_EQUAL(mass, expectedMass);
+	BOOST_CHECK_EQUAL(cone_fail.IsDataMoreZero(), false);
 }
 
 BOOST_AUTO_TEST_CASE(HasDensity)
 {
-	double density = comp.GetDensity();
-	double expectedVolume = sphere.GetVolume() + cone.GetVolume() + cylinder.GetVolume() + par.GetVolume();
-	double expectedMass = sphere.GetMass() + cone.GetMass() + cylinder.GetMass() + par.GetMass();
-	double expectedDensity = expectedMass / expectedVolume;
-	BOOST_CHECK_EQUAL(density, expectedDensity);
+	BOOST_CHECK_EQUAL(cone.GetDensity(), EXPECTED_DENSITY);
 }
 
-BOOST_AUTO_TEST_CASE(HasInformation)
+BOOST_AUTO_TEST_CASE(HasVolume)
 {
-	const std::string info = comp.GetInfo();
-	std::ostringstream expectedInfo;
+	const double EXPECTED_VOLUME = (1.0 / 3) * (M_PI * EXPECTED_RADIUS * EXPECTED_RADIUS) *
+		EXPECTED_HEIGHT;
+	BOOST_CHECK_EQUAL(cone.GetVolume(), EXPECTED_VOLUME);
 
-	expectedInfo << "Compound body composed of " << comp.GetContentsCount() << " bodies" << endl;
-	expectedInfo << "With mass " << comp.GetMass();
-	expectedInfo << ", volume " << comp.GetVolume();
-	expectedInfo << " and density " << comp.GetDensity() << endl;
-	expectedInfo << "Contents:" << endl;
-	expectedInfo << sphere.GetInfo() << endl;
-	expectedInfo << cone.GetInfo() << endl;
-	expectedInfo << cylinder.GetInfo() << endl;
-	expectedInfo << par.GetInfo() << endl;
-
-	BOOST_CHECK_EQUAL(expectedInfo.str(), info);
+	IBody &coneAsBody = cone;
+	BOOST_CHECK_EQUAL(coneAsBody.GetVolume(), EXPECTED_VOLUME);
 }
 
-BOOST_AUTO_TEST_CASE(TestEmptyCompound)
+BOOST_AUTO_TEST_CASE(HasMass)
 {
-	CCompound compound;
-	CBody &compoundAsBody = compound;
-
-	{
-		bool exceptionCaught = false;
-		try
-		{
-			compoundAsBody.GetDensity();
-		}
-		catch (const runtime_error &e)
-		{
-			(void)e;
-			exceptionCaught = true;
-		}
-		BOOST_CHECK(exceptionCaught);
-	}
-
-	BOOST_CHECK_EQUAL(compoundAsBody.GetVolume(), 0);
-	BOOST_CHECK_EQUAL(compoundAsBody.GetMass(), 0);
-}
-
-BOOST_AUTO_TEST_CASE(TestDirectSelfInclusion)
-{
-	shared_ptr<CCompound> compound(new CCompound());
-
-	BOOST_CHECK_EQUAL(compound->AddBody(compound), false);
-}
-
-BOOST_AUTO_TEST_CASE(AddCompoundToItselfChained)
-{
-	shared_ptr<CCompound> compound1(new CCompound());
-	shared_ptr<CCompound> compound2(new CCompound());
-
-	compound2->AddBody(shared_ptr<CParallelepiped>(new CParallelepiped(10, 3.6, 6, 40)));
-	BOOST_CHECK_EQUAL(compound1->AddBody(compound2), true);
-	BOOST_CHECK_EQUAL(compound2->AddBody(compound1), false);
+	const double EXPECTED_MASS = cone.GetVolume() * cone.GetDensity();
+	BOOST_CHECK_EQUAL(cone.GetMass(), EXPECTED_MASS);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

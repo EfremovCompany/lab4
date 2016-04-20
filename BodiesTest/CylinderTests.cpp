@@ -11,19 +11,11 @@ static const double WRONG_EXPECTED_DENSITY = -25000;
 struct CylinderFixture
 {
 	CCylinder cylinder;
+	CCylinder cylinder_fail;
 
 	CylinderFixture()
 		: cylinder(EXPECTED_RADIUS, EXPECTED_HEIGHT, EXPECTED_DENSITY)
-	{
-	}
-};
-
-struct CylinderFailFixture
-{
-	CCylinder cylinder_fail;
-
-	CylinderFailFixture()
-		: cylinder_fail(WRONG_EXPECTED_RADIUS, EXPECTED_HEIGHT, WRONG_EXPECTED_DENSITY)
+		, cylinder_fail(WRONG_EXPECTED_RADIUS, EXPECTED_HEIGHT, WRONG_EXPECTED_DENSITY)
 	{
 	}
 };
@@ -32,8 +24,14 @@ BOOST_FIXTURE_TEST_SUITE(Cylinder, CylinderFixture)
 
 BOOST_AUTO_TEST_CASE(HasDimensions)
 {
+	BOOST_CHECK_EQUAL(cylinder.IsDataMoreZero(), true);
 	BOOST_CHECK_EQUAL(cylinder.GetHeight(), EXPECTED_HEIGHT);
 	BOOST_CHECK_EQUAL(cylinder.GetRadius(), EXPECTED_RADIUS);
+}
+
+BOOST_AUTO_TEST_CASE(BadCylIsFail)
+{
+	BOOST_CHECK_EQUAL(cylinder_fail.IsDataMoreZero(), false);
 }
 
 BOOST_AUTO_TEST_CASE(HasDensity)
@@ -67,15 +65,6 @@ BOOST_AUTO_TEST_CASE(HasInfo)
 	expectedInfo << " and density " << cylinder.GetDensity();
 
 	BOOST_CHECK_EQUAL(expectedInfo.str(), info);
-}
-
-BOOST_AUTO_TEST_SUITE_END()
-
-BOOST_FIXTURE_TEST_SUITE(cylinder_fail, CylinderFailFixture)
-
-BOOST_AUTO_TEST_CASE(IsZero)
-{
-	BOOST_CHECK_EQUAL(cylinder_fail.IsDataMoreZero(), false);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

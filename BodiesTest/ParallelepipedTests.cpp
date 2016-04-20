@@ -12,20 +12,12 @@ static const double WRONG_EXPECTED_HEIGHT = -4.2;
 struct ParallelepipedFixture
 {
 	CParallelepiped par;
+	CParallelepiped par_fail;
 
 	ParallelepipedFixture()
 		: par(EXPECTED_WIDTH, EXPECTED_HEIGHT, EXPECTED_DEPTH,
 			EXPECTED_DENSITY)
-	{
-	}
-};
-
-struct ParallelepipedFixtureFail
-{
-	CParallelepiped par_fail;
-
-	ParallelepipedFixtureFail()
-		: par_fail(WRONG_EXPECTED_WIDTH, WRONG_EXPECTED_HEIGHT, EXPECTED_DEPTH,
+		, par_fail(WRONG_EXPECTED_WIDTH, WRONG_EXPECTED_HEIGHT, EXPECTED_DEPTH,
 			EXPECTED_DENSITY)
 	{
 	}
@@ -33,11 +25,21 @@ struct ParallelepipedFixtureFail
 
 BOOST_FIXTURE_TEST_SUITE(Parallelepiped, ParallelepipedFixture)
 
+BOOST_AUTO_TEST_CASE(IsParMoreZero)
+{
+	BOOST_CHECK_EQUAL(par.IsDataMoreZero(), true);
+}
+
 BOOST_AUTO_TEST_CASE(HasDimensions)
 {
 	BOOST_CHECK_EQUAL(par.GetWidth(), EXPECTED_WIDTH);
 	BOOST_CHECK_EQUAL(par.GetHeight(), EXPECTED_HEIGHT);
 	BOOST_CHECK_EQUAL(par.GetDepth(), EXPECTED_DEPTH);
+}
+
+BOOST_AUTO_TEST_CASE(FailParIsFail)
+{
+	BOOST_CHECK_EQUAL(par_fail.IsDataMoreZero(), false);
 }
 
 BOOST_AUTO_TEST_CASE(HasDensity)
@@ -72,15 +74,6 @@ BOOST_AUTO_TEST_CASE(HasInfo)
 	expectedInfo << " and density " << par.GetDensity();
 
 	BOOST_CHECK_EQUAL(expectedInfo.str(), info);
-}
-
-BOOST_AUTO_TEST_SUITE_END()
-
-BOOST_FIXTURE_TEST_SUITE(par_fail, ParallelepipedFixtureFail)
-
-BOOST_AUTO_TEST_CASE(IsMoreZero)
-{
-	BOOST_CHECK_EQUAL(par_fail.IsDataMoreZero(), false);
 }
 
 BOOST_AUTO_TEST_SUITE_END()
